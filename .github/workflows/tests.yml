@@ -1,0 +1,97 @@
+name: Test Suite
+
+on:
+  workflow_run:
+    workflows: ["Code Quality Check"]
+    types: [completed]
+    branches: [ main ]
+
+# Force l'affichage du nom du workflow
+run-name: Test Suite - ${{ github.event.workflow_run.head_commit.message }}
+
+jobs:
+  # Check if linting succeeded
+  check-lint-success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Linting passed
+        run: echo "Linting workflow completed successfully"
+
+  # Backend tests with test database
+  backend-tests:
+    runs-on: ubuntu-latest
+    needs: [check-lint-success]
+    defaults:
+      run:
+        working-directory: ./backend
+    
+    services:
+      postgres:
+        image: postgres:17.6-alpine
+        env:
+          POSTGRES_DB: ${{ secrets.TEST_POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.TEST_POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.TEST_POSTGRES_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Wait for database
+      run: sleep 10
+    
+    - name: Run database migrations
+      run: |
+        PGPASSWORD=${{ secrets.TEST_POSTGRES_PASSWORD }} psql -h localhost -U ${{ secrets.TEST_POSTGRES_USER }} -d ${{ secrets.TEST_POSTGRES_DB }} -f database/init-test.sql
+      env:
+        DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+    
+    - name: Test with pytest
+      run: pytest --cov=app --cov-report=xml
+      env:
+        DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+        MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+
+  # Frontend tests
+  frontend-tests:
+    runs-on: ubuntu-latest
+    needs: [check-lint-success]
+    defaults:
+      run:
+        working-directory: ./frontend
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: ./frontend/package-lock.json
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build
+      run: npm run build
+    
+    - name: Test (if available)
+      run: npm test --if-present
