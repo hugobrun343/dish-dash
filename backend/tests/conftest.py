@@ -14,8 +14,8 @@ os.environ["SECRET_KEY"] = "test_secret_key_for_testing_only"
 os.environ["ALGORITHM"] = "HS256"
 os.environ["ACCESS_TOKEN_EXPIRE_MINUTES"] = "30"
 
-import pytest
 from fastapi.testclient import TestClient
+from pytest import fixture
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -36,7 +36,7 @@ engine = create_engine(
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-@pytest.fixture(scope="function")
+@fixture(scope="function")  # type: ignore[misc]
 def db() -> Generator[Session, None, None]:
     """
     Create a fresh database for each test
@@ -55,7 +55,7 @@ def db() -> Generator[Session, None, None]:
     Base.metadata.drop_all(bind=engine)
 
 
-@pytest.fixture(scope="function")
+@fixture(scope="function")  # type: ignore[misc]
 def client(db: Session) -> Generator[TestClient, None, None]:
     """
     Create a test client with overridden database
@@ -75,7 +75,7 @@ def client(db: Session) -> Generator[TestClient, None, None]:
     app.dependency_overrides.clear()
 
 
-@pytest.fixture
+@fixture  # type: ignore[misc]
 def test_user(db: Session) -> User:
     """
     Create a test user
@@ -87,7 +87,7 @@ def test_user(db: Session) -> User:
     return user
 
 
-@pytest.fixture
+@fixture  # type: ignore[misc]
 def test_recipe(db: Session) -> Recipe:
     """
     Create a test recipe
@@ -111,7 +111,7 @@ def test_recipe(db: Session) -> Recipe:
     return recipe
 
 
-@pytest.fixture
+@fixture  # type: ignore[misc]
 def auth_headers(client: TestClient) -> dict[str, str]:
     """
     Get authentication headers for a test user
