@@ -69,9 +69,6 @@ py.typed
 *.db
 *.sqlite3
 
-# Docker
-.dockerignore
-
 # TypeScript
 *.tsbuildinfo
 
@@ -87,3 +84,10 @@ frontend/.prettierrc
 
 # Backend config files
 backend/app/py.typed
+
+# Docker
+docker-compose.override.yml
+
+# Python cache
+*.pyc
+*.pyo
