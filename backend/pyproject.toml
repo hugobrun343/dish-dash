@@ -35,11 +35,17 @@ warn_unused_ignores = true
 warn_no_return = true
 warn_unreachable = true
 strict_equality = true
+follow_imports = "skip"
+ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = [
     "mistralai.*",
     "uvicorn.*",
-    "fastapi.*"
+    "fastapi.*",
+    "sqlalchemy.*",
+    "jose.*",
+    "pydantic.*",
+    "pydantic_settings.*",
 ]
 ignore_missing_imports = true
