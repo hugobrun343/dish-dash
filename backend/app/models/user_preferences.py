@@ -22,7 +22,6 @@ class UserPreferences(Base):
     allergies = Column(JSON, nullable=True)  # nuts, dairy, shellfish, etc.
     cooking_time_preference = Column(Integer, nullable=True)  # max cooking time in minutes
     difficulty_preference = Column(Integer, nullable=True)  # 1=easy, 10=expert
-    cuisine_preferences = Column(JSON, nullable=True)  # italian, french, asian, etc.
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
     # Relationships

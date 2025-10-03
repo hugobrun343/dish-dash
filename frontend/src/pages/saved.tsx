@@ -3,9 +3,9 @@ import { useRouter } from 'next/router';
 import { useAuth } from '@/hooks/useAuth';
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardHeader, CardTitle, Loading } from '@/components/ui';
-import { SparklesIcon } from '@heroicons/react/24/outline';
+import { BookmarkIcon } from '@heroicons/react/24/outline';
 
-export default function GenerateRecipePage() {
+export default function SavedRecipesPage() {
   const router = useRouter();
   const { user, isAuthenticated, isLoading, logout } = useAuth();
 
@@ -39,10 +39,10 @@ export default function GenerateRecipePage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Generate Recipe
+            Saved Recipes
           </h1>
           <p className="text-lg text-gray-600">
-            Create personalized recipes based on your ingredients and preferences
+            Your collection of favorite recipes
           </p>
         </div>
 
@@ -51,21 +51,21 @@ export default function GenerateRecipePage() {
           <CardHeader>
             <div className="flex items-center space-x-3">
               <div className="h-10 w-10 bg-blue-50 rounded-lg flex items-center justify-center">
-                <SparklesIcon className="h-6 w-6 text-blue-500" />
+                <BookmarkIcon className="h-6 w-6 text-blue-500" />
               </div>
-              <CardTitle>Recipe Generator</CardTitle>
+              <CardTitle>Your Saved Recipes</CardTitle>
             </div>
           </CardHeader>
           
           <div className="p-8 text-center">
             <div className="mx-auto h-24 w-24 bg-blue-50 rounded-full flex items-center justify-center mb-6">
-              <SparklesIcon className="h-12 w-12 text-blue-500" />
+              <BookmarkIcon className="h-12 w-12 text-blue-500" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
-              Coming Soon
+              No saved recipes yet
             </h3>
             <p className="text-gray-600 max-w-md mx-auto">
-              The recipe generator will be available soon. You&apos;ll be able to create amazing recipes from your ingredients!
+              Start generating recipes and save your favorites to see them here!
             </p>
           </div>
         </Card>

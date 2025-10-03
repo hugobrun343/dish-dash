@@ -6,7 +6,9 @@ from sqlalchemy.orm import Session
 
 from app.models.recipe import Recipe
 from app.models.user import User
+from app.models.user_preferences import UserPreferences
 from app.schemas.recipe import RecipeCreate
+from app.schemas.user import UserPreferencesUpdate
 from app.services.auth_service import authenticate_user, get_or_create_user
 from app.services.recipe_service import (
     create_recipe,
@@ -15,6 +17,11 @@ from app.services.recipe_service import (
     get_saved_recipes_for_user,
     save_recipe_for_user,
     unsave_recipe_for_user,
+)
+from app.services.user_service import (
+    create_user_preferences,
+    get_user_preferences,
+    update_user_preferences,
 )
 
 
@@ -200,4 +207,64 @@ def test_saved_recipes_ordered_by_date(
     assert len(saved_recipes) == 2
     assert saved_recipes[0].recipe_id == recipe2.id
     assert saved_recipes[1].recipe_id == test_recipe.id
+
+
+# User Service Tests
+def test_get_user_preferences_not_found(db: Session, test_user: User) -> None:
+    """Test getting preferences for user with none"""
+    preferences = get_user_preferences(db, test_user)
+    assert preferences is None
+
+
+def test_get_user_preferences_found(db: Session, test_user_preferences: UserPreferences) -> None:
+    """Test getting existing preferences"""
+    preferences = get_user_preferences(db, test_user_preferences.user)
+    assert preferences is not None
+    assert preferences.user_id == test_user_preferences.user_id
+    assert preferences.dietary_restrictions == ["vegetarian"]
+
+
+def test_create_user_preferences(db: Session, test_user: User) -> None:
+    """Test creating new preferences"""
+    preferences_data = UserPreferencesUpdate(
+        dietary_restrictions=["vegan"],
+        allergies=["shellfish"],
+        cooking_time_preference=30,
+        difficulty_preference=6,
+    )
+
+    preferences = create_user_preferences(db, test_user, preferences_data)
+
+    assert preferences.user_id == test_user.id
+    assert preferences.dietary_restrictions == ["vegan"]
+    assert preferences.allergies == ["shellfish"]
+    assert preferences.cooking_time_preference == 30
+    assert preferences.difficulty_preference == 6
+
+
+def test_update_user_preferences(db: Session, test_user_preferences: UserPreferences) -> None:
+    """Test updating existing preferences"""
+    update_data = UserPreferencesUpdate(
+        dietary_restrictions=["vegan"],
+        cooking_time_preference=60
+    )
+
+    updated_preferences = update_user_preferences(db, test_user_preferences.user, update_data)
+
+    assert updated_preferences.dietary_restrictions == ["vegan"]
+    assert updated_preferences.cooking_time_preference == 60
+    # Other fields should remain unchanged
+    assert updated_preferences.allergies == ["nuts"]
+    assert updated_preferences.difficulty_preference == 5
+
+
+def test_update_user_preferences_not_found(db: Session, test_user: User) -> None:
+    """Test updating preferences that don't exist"""
+    update_data = UserPreferencesUpdate(dietary_restrictions=["vegan"])
+
+    try:
+        update_user_preferences(db, test_user, update_data)
+        raise AssertionError("Should have raised ValueError")
+    except ValueError as e:
+        assert "User preferences not found" in str(e)
 

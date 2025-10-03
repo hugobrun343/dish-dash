@@ -35,6 +35,11 @@ app/
 ### Authentication
 - `POST /api/v1/auth/login` - Login with username (creates user if doesn't exist)
 
+### Users (requires authentication)
+- `GET /api/v1/users/me` - Get current user profile
+- `GET /api/v1/users/me/preferences` - Get user preferences
+- `PUT /api/v1/users/me/preferences` - Update user preferences
+
 ### Recipes (requires authentication)
 - `POST /api/v1/recipes/generate` - Generate recipe list from ingredients using AI
 - `POST /api/v1/recipes/details` - Get detailed recipe with AI

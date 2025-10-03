@@ -129,9 +129,6 @@ Requirements:
             restrictions = ", ".join(request.dietary_restrictions)
             prompt += f"\n- Dietary restrictions: {restrictions}"
 
-        if request.cuisine_preferences:
-            cuisines = ", ".join(request.cuisine_preferences)
-            prompt += f"\n- Cuisine preferences: {cuisines}"
 
         prompt += """
 

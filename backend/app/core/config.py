@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     MISTRAL_API_KEY: str
 
     # CORS
-    BACKEND_CORS_ORIGINS: list[str] = ["http://localhost:3000"]
+    BACKEND_CORS_ORIGINS: str = "http://localhost:3000"
 
     # Security (for JWT authentication)
     SECRET_KEY: str
