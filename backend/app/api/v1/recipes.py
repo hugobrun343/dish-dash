@@ -54,7 +54,6 @@ async def generate_recipes(
             "difficulty": 5,
             "servings": 2,
             "dietary_restrictions": ["gluten-free"],
-            "cuisine_preferences": ["italian"]
         }
 
         Response:

@@ -22,7 +22,6 @@ class RecipeGenerateRequest(BaseModel):
     difficulty: int | None = Field(default=None, ge=1, le=10, description="Difficulty level (1-10)")
     servings: int = Field(default=2, ge=1, description="Number of servings")
     dietary_restrictions: list[str] | None = Field(default=None, description="Dietary restrictions")
-    cuisine_preferences: list[str] | None = Field(default=None, description="Cuisine preferences")
 
 
 class RecipeDetailsRequest(BaseModel):

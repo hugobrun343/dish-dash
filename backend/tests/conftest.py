@@ -23,6 +23,7 @@ from app.core.database import Base, get_db
 from app.main import app
 from app.models.recipe import Recipe
 from app.models.user import User
+from app.models.user_preferences import UserPreferences
 
 # Test database URL (in-memory SQLite for tests)
 SQLALCHEMY_TEST_DATABASE_URL = "sqlite:///./test.db"
@@ -109,6 +110,22 @@ def test_recipe(db: Session) -> Recipe:
     db.commit()
     db.refresh(recipe)
     return recipe
+
+
+@fixture  # type: ignore[misc]
+def test_user_preferences(db: Session, test_user: User) -> UserPreferences:
+    """
+    Create test user preferences
+    """
+    preferences = UserPreferences(
+        user_id=test_user.id,
+        dietary_restrictions=["vegetarian"],
+        allergies=["nuts"],
+    )
+    db.add(preferences)
+    db.commit()
+    db.refresh(preferences)
+    return preferences
 
 
 @fixture  # type: ignore[misc]

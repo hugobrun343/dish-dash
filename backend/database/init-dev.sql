@@ -31,11 +31,8 @@ CREATE TABLE IF NOT EXISTS saved_recipes (
 
 CREATE TABLE IF NOT EXISTS user_preferences (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE UNIQUE,
     dietary_restrictions JSONB, -- vegetarian, vegan, gluten-free, etc.
     allergies JSONB, -- nuts, dairy, shellfish, etc.
-    cooking_time_preference INTEGER, -- max cooking time in minutes
-    difficulty_preference INTEGER CHECK (difficulty_preference >= 1 AND difficulty_preference <= 10), -- 1=easy, 10=expert
-    cuisine_preferences JSONB, -- italian, french, asian, etc.
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

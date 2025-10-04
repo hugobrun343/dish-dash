@@ -106,6 +106,22 @@ class AIService:
                 return {}
 
             data: dict[str, Any] = json.loads(content)
+
+            # Convert instructions list to string if needed
+            if 'instructions' in data and isinstance(data['instructions'], list):
+                data['instructions'] = '\n'.join(data['instructions'])
+
+            # Convert ingredients list to RecipeIngredient objects if needed
+            if 'ingredients' in data and isinstance(data['ingredients'], list):
+                formatted_ingredients = []
+                for ingredient in data['ingredients']:
+                    if isinstance(ingredient, dict):
+                        formatted_ingredients.append(ingredient)
+                    elif isinstance(ingredient, str):
+                        # If ingredient is just a string, assume it's the name
+                        formatted_ingredients.append({"name": ingredient, "quantity": "as needed"})
+                data['ingredients'] = formatted_ingredients
+
             return data
         except (json.JSONDecodeError, KeyError, IndexError):
             return {}
@@ -114,7 +130,7 @@ class AIService:
         """Build prompt for recipe list generation"""
         ingredients_str = ", ".join(request.ingredients)
 
-        prompt = f"""Generate 3-5 recipe suggestions using these ingredients: {ingredients_str}
+        prompt = f"""Generate 6 recipe suggestions using these ingredients: {ingredients_str}
 
 Requirements:
 - Servings: {request.servings}"""
@@ -129,13 +145,10 @@ Requirements:
             restrictions = ", ".join(request.dietary_restrictions)
             prompt += f"\n- Dietary restrictions: {restrictions}"
 
-        if request.cuisine_preferences:
-            cuisines = ", ".join(request.cuisine_preferences)
-            prompt += f"\n- Cuisine preferences: {cuisines}"
 
         prompt += """
 
-Return a JSON object with this structure:
+Return a JSON object with this structure (exactly 6 recipes):
 {
   "recipes": [
     {
