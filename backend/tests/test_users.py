@@ -38,8 +38,6 @@ class TestUserRoutes:
         data = response.json()
         assert data["dietary_restrictions"] == []
         assert data["allergies"] == []
-        assert data["cooking_time_preference"] is None
-        assert data["difficulty_preference"] is None
 
     def test_get_user_preferences_existing(self, client: TestClient, db: Session, test_user_preferences: UserPreferences):
         """Test getting existing user preferences"""
@@ -58,8 +56,6 @@ class TestUserRoutes:
         assert "user_id" in data
         assert "dietary_restrictions" in data
         assert "allergies" in data
-        assert "cooking_time_preference" in data
-        assert "difficulty_preference" in data
         assert "updated_at" in data
 
     def test_create_user_preferences(self, client: TestClient, auth_headers: dict[str, str]):
@@ -67,8 +63,6 @@ class TestUserRoutes:
         preferences_data = {
             "dietary_restrictions": ["vegetarian", "gluten-free"],
             "allergies": ["nuts", "dairy"],
-            "cooking_time_preference": 45,
-            "difficulty_preference": 7,
         }
 
         response = client.put("/api/v1/me/preferences", json=preferences_data, headers=auth_headers)
@@ -77,8 +71,6 @@ class TestUserRoutes:
         data = response.json()
         assert data["dietary_restrictions"] == ["vegetarian", "gluten-free"]
         assert data["allergies"] == ["nuts", "dairy"]
-        assert data["cooking_time_preference"] == 45
-        assert data["difficulty_preference"] == 7
 
     def test_update_user_preferences(self, client: TestClient, db: Session, test_user_preferences: UserPreferences):
         """Test updating existing user preferences"""
@@ -89,9 +81,7 @@ class TestUserRoutes:
         headers = {"Authorization": f"Bearer {token}"}
 
         update_data = {
-            "dietary_restrictions": ["vegan"],
-            "cooking_time_preference": 60,
-            "difficulty_preference": 8
+            "dietary_restrictions": ["vegan"]
         }
 
         response = client.put("/api/v1/me/preferences", json=update_data, headers=headers)
@@ -99,8 +89,6 @@ class TestUserRoutes:
         assert response.status_code == 200
         data = response.json()
         assert data["dietary_restrictions"] == ["vegan"]
-        assert data["cooking_time_preference"] == 60
-        assert data["difficulty_preference"] == 8
         # Other fields should remain unchanged
         assert data["allergies"] == ["nuts"]
 
@@ -113,28 +101,17 @@ class TestUserRoutes:
         headers = {"Authorization": f"Bearer {token}"}
 
         update_data = {
-            "cooking_time_preference": 90
+            "allergies": ["shellfish"]
         }
 
         response = client.put("/api/v1/me/preferences", json=update_data, headers=headers)
 
         assert response.status_code == 200
         data = response.json()
-        assert data["cooking_time_preference"] == 90
+        assert data["allergies"] == ["shellfish"]
         # Other fields should remain unchanged
         assert data["dietary_restrictions"] == ["vegetarian"]
-        assert data["allergies"] == ["nuts"]
-        assert data["difficulty_preference"] == 5
 
-    def test_update_user_preferences_invalid_difficulty(self, client: TestClient, auth_headers: dict[str, str]):
-        """Test updating preferences with invalid difficulty level"""
-        preferences_data = {
-            "difficulty_preference": 15  # Invalid: should be 1-10
-        }
-
-        response = client.put("/api/v1/me/preferences", json=preferences_data, headers=auth_headers)
-
-        assert response.status_code == 422  # Validation error
 
     def test_update_user_preferences_unauthorized(self, client: TestClient):
         """Test updating preferences without authentication"""
@@ -174,8 +151,6 @@ class TestUserService:
         preferences_data = UserPreferencesUpdate(
             dietary_restrictions=["vegan"],
             allergies=["shellfish"],
-            cooking_time_preference=30,
-            difficulty_preference=6,
         )
 
         preferences = create_user_preferences(db, test_user, preferences_data)
@@ -183,8 +158,6 @@ class TestUserService:
         assert preferences.user_id == test_user.id
         assert preferences.dietary_restrictions == ["vegan"]
         assert preferences.allergies == ["shellfish"]
-        assert preferences.cooking_time_preference == 30
-        assert preferences.difficulty_preference == 6
 
     def test_update_user_preferences(self, db: Session, test_user: User, test_user_preferences: UserPreferences):
         """Test updating existing preferences"""
@@ -192,17 +165,14 @@ class TestUserService:
         from app.services.user_service import update_user_preferences
 
         update_data = UserPreferencesUpdate(
-            dietary_restrictions=["vegan"],
-            cooking_time_preference=60
+            dietary_restrictions=["vegan"]
         )
 
         updated_preferences = update_user_preferences(db, test_user, update_data)
 
         assert updated_preferences.dietary_restrictions == ["vegan"]
-        assert updated_preferences.cooking_time_preference == 60
         # Other fields should remain unchanged
         assert updated_preferences.allergies == ["nuts"]
-        assert updated_preferences.difficulty_preference == 5
 
     def test_update_user_preferences_not_found(self, db: Session, test_user: User):
         """Test updating preferences that don't exist"""

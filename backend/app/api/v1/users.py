@@ -1,7 +1,8 @@
 
+from typing import Any
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import Any, cast
 
 from app.core.database import get_db
 from app.core.security import get_current_user
@@ -37,9 +38,7 @@ def _get_user_preferences(
         # Return default preferences if none exist
         return {
             "dietary_restrictions": [],
-            "allergies": [],
-            "cooking_time_preference": None,
-            "difficulty_preference": None
+            "allergies": []
         }
 
     return UserPreferencesResponse(
@@ -47,8 +46,6 @@ def _get_user_preferences(
         user_id=preferences.user_id,
         dietary_restrictions=preferences.dietary_restrictions or [],
         allergies=preferences.allergies or [],
-        cooking_time_preference=preferences.cooking_time_preference,
-        difficulty_preference=preferences.difficulty_preference,
         updated_at=preferences.updated_at
     )
 
@@ -85,8 +82,6 @@ def _update_user_preferences(
         user_id=updated_preferences.user_id,
         dietary_restrictions=updated_preferences.dietary_restrictions or [],
         allergies=updated_preferences.allergies or [],
-        cooking_time_preference=updated_preferences.cooking_time_preference,
-        difficulty_preference=updated_preferences.difficulty_preference,
         updated_at=updated_preferences.updated_at
     )
 

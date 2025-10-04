@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -6,13 +6,13 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   icon?: React.ReactNode;
 }
 
-export function Input({
+export const Input = forwardRef<HTMLInputElement, InputProps>(({
   label,
   error,
   icon,
   className = '',
   ...props
-}: InputProps) {
+}, ref) => {
   const inputClasses = `
     block w-full px-3 py-2 border rounded-lg shadow-sm placeholder-gray-400 
     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
@@ -38,6 +38,7 @@ export function Input({
           </div>
         )}
         <input
+          ref={ref}
           className={inputClasses}
           {...props}
         />
@@ -47,4 +48,6 @@ export function Input({
       )}
     </div>
   );
-}
+});
+
+Input.displayName = 'Input';

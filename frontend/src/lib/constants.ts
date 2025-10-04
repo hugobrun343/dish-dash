@@ -16,7 +16,7 @@ export const COOKING_TIME_RANGES = [
 
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
+  BASE_URL: process.env.NEXT_PUBLIC_API_URL,
   TIMEOUT: 30000,
 } as const;
 

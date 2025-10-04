@@ -45,8 +45,6 @@ def create_user_preferences(
         user_id=user.id,
         dietary_restrictions=preferences_data.dietary_restrictions,
         allergies=preferences_data.allergies,
-        cooking_time_preference=preferences_data.cooking_time_preference,
-        difficulty_preference=preferences_data.difficulty_preference,
     )
 
     db.add(preferences)
@@ -82,10 +80,6 @@ def update_user_preferences(
         preferences.dietary_restrictions = preferences_data.dietary_restrictions
     if preferences_data.allergies is not None:
         preferences.allergies = preferences_data.allergies
-    if preferences_data.cooking_time_preference is not None:
-        preferences.cooking_time_preference = preferences_data.cooking_time_preference
-    if preferences_data.difficulty_preference is not None:
-        preferences.difficulty_preference = preferences_data.difficulty_preference
 
     db.commit()
     db.refresh(preferences)
@@ -110,8 +104,6 @@ class UserService:
             user_id=user_id,
             dietary_restrictions=preferences_data.dietary_restrictions,
             allergies=preferences_data.allergies,
-            cooking_time_preference=preferences_data.cooking_time_preference,
-            difficulty_preference=preferences_data.difficulty_preference,
         )
 
         self.db.add(preferences)

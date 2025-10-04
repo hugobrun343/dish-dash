@@ -10,8 +10,7 @@ export interface User {
 
 export interface UserPreferences {
   dietary_restrictions: string[];
-  spice_level: 'mild' | 'medium' | 'hot';
-  cooking_time_preference: 'quick' | 'moderate' | 'extensive';
+  allergies: string[];
 }
 
 // Recipe types

@@ -1,6 +1,6 @@
 // Environment configuration
 export const ENV = {
-  API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
+  API_URL: process.env.NEXT_PUBLIC_API_URL,
   NODE_ENV: process.env.NODE_ENV || 'development',
   IS_DEVELOPMENT: process.env.NODE_ENV === 'development',
   IS_PRODUCTION: process.env.NODE_ENV === 'production',
@@ -9,17 +9,17 @@ export const ENV = {
 // API endpoints
 export const API_ENDPOINTS = {
   AUTH: {
-    LOGIN: '/api/v1/auth/login',
+    LOGIN: '/auth/login',
   },
   HEALTH: {
     CHECK: '/health',
     DB: '/health/db',
   },
   RECIPES: {
-    GENERATE: '/api/v1/recipes/generate',
-    GET: (id: string) => `/api/v1/recipes/${id}`,
-    SAVE: (id: string) => `/api/v1/recipes/${id}/save`,
-    UNSAVE: (id: string) => `/api/v1/recipes/${id}/save`,
-    SAVED: '/api/v1/recipes/saved',
+    GENERATE: '/recipes/generate',
+    GET: (id: string) => `/recipes/${id}`,
+    SAVE: (id: string) => `/recipes/${id}/save`,
+    UNSAVE: (id: string) => `/recipes/${id}/save`,
+    SAVED: '/recipes/saved',
   },
 } as const;

@@ -100,10 +100,11 @@ export function isValidUsername(username: string): boolean {
 
 // URL helpers
 export function getApiUrl(): string {
-  if (typeof window !== 'undefined') {
-    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error('NEXT_PUBLIC_API_URL environment variable is not set');
   }
-  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  return apiUrl;
 }
 
 // Error handling

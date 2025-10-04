@@ -27,11 +27,16 @@ export default function LoginPage() {
       return;
     }
 
+    if (username.trim().length < 4) {
+      setError('Username must be at least 4 characters long');
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
       await login(username.trim());
-      router.push('/');
+      // No need to push here, useAuth will handle the redirect
     } catch (error) {
       setError('Login failed. Please try again.');
     } finally {
@@ -42,7 +47,7 @@ export default function LoginPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loading size="lg" text="Loading..." />
+        <Loading />
       </div>
     );
   }

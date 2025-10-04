@@ -121,8 +121,6 @@ def test_user_preferences(db: Session, test_user: User) -> UserPreferences:
         user_id=test_user.id,
         dietary_restrictions=["vegetarian"],
         allergies=["nuts"],
-        cooking_time_preference=30,
-        difficulty_preference=5,
     )
     db.add(preferences)
     db.commit()

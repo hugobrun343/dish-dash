@@ -5,7 +5,7 @@ import { Layout } from '@/components/layout/Layout';
 import { Card, CardHeader, CardTitle, Loading } from '@/components/ui';
 import { SparklesIcon } from '@heroicons/react/24/outline';
 
-export default function GenerateRecipePage() {
+export default function HomePage() {
   const router = useRouter();
   const { user, isAuthenticated, isLoading, logout } = useAuth();
 
@@ -24,7 +24,7 @@ export default function GenerateRecipePage() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loading size="lg" text="Loading..." />
+        <Loading size="lg" />
       </div>
     );
   }
@@ -39,10 +39,10 @@ export default function GenerateRecipePage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Generate Recipe
+            Welcome to DishDash
           </h1>
           <p className="text-lg text-gray-600">
-            Create personalized recipes based on your ingredients and preferences
+            Your personal recipe assistant powered by AI
           </p>
         </div>
 
@@ -62,11 +62,17 @@ export default function GenerateRecipePage() {
               <SparklesIcon className="h-12 w-12 text-blue-500" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
-              Coming Soon
+              Ready to Cook?
             </h3>
-            <p className="text-gray-600 max-w-md mx-auto">
-              The recipe generator will be available soon. You&apos;ll be able to create amazing recipes from your ingredients!
+            <p className="text-gray-600 max-w-md mx-auto mb-6">
+              Generate personalized recipes from your ingredients and cooking preferences.
             </p>
+            <button
+              onClick={() => router.push('/recipes/generate')}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+            >
+              Start Generating Recipes
+            </button>
           </div>
         </Card>
       </div>

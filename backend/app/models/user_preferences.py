@@ -20,8 +20,6 @@ class UserPreferences(Base):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, unique=True)
     dietary_restrictions = Column(JSON, nullable=True)  # vegetarian, vegan, gluten-free, etc.
     allergies = Column(JSON, nullable=True)  # nuts, dairy, shellfish, etc.
-    cooking_time_preference = Column(Integer, nullable=True)  # max cooking time in minutes
-    difficulty_preference = Column(Integer, nullable=True)  # 1=easy, 10=expert
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
     # Relationships

@@ -34,7 +34,5 @@ CREATE TABLE IF NOT EXISTS user_preferences (
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE UNIQUE,
     dietary_restrictions JSONB, -- vegetarian, vegan, gluten-free, etc.
     allergies JSONB, -- nuts, dairy, shellfish, etc.
-    cooking_time_preference INTEGER, -- max cooking time in minutes
-    difficulty_preference INTEGER CHECK (difficulty_preference >= 1 AND difficulty_preference <= 10), -- 1=easy, 10=expert
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

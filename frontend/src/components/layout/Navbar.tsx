@@ -15,7 +15,7 @@ export function Navbar({ onLogout }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { href: '/', label: 'Generate Recipe', icon: SparklesIcon },
+    { href: '/recipes/generate', label: 'Generate Recipe', icon: SparklesIcon },
     { href: '/saved', label: 'Saved Recipes', icon: BookmarkIcon },
     { href: '/profile', label: 'Profile', icon: UserIcon },
   ];

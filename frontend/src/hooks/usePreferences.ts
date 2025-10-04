@@ -6,8 +6,6 @@ export interface UserPreferences {
   user_id?: number;
   dietary_restrictions?: string[];
   allergies?: string[];
-  cooking_time_preference?: number;
-  difficulty_preference?: number;
   updated_at?: string;
 }
 

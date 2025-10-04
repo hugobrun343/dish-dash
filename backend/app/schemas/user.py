@@ -33,8 +33,6 @@ class UserPreferencesBase(BaseModel):
 
     dietary_restrictions: list[str] | None = Field(default=None, description="Dietary restrictions")
     allergies: list[str] | None = Field(default=None, description="Allergies")
-    cooking_time_preference: int | None = Field(default=None, description="Max cooking time in minutes")
-    difficulty_preference: int | None = Field(default=None, ge=1, le=10, description="Difficulty level (1-10)")
 
 
 class UserPreferencesCreate(UserPreferencesBase):

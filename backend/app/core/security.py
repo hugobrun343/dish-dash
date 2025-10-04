@@ -101,10 +101,10 @@ def get_current_user(
     # Get user from database
     user_query = db.query(User).filter(User.username == username)
     user = user_query.first()
-    
+
     if user is None:
         raise credentials_exception
-    
+
     # Type assertion since we know it's a User if not None
     assert isinstance(user, User)
     return user

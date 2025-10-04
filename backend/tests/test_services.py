@@ -229,8 +229,6 @@ def test_create_user_preferences(db: Session, test_user: User) -> None:
     preferences_data = UserPreferencesUpdate(
         dietary_restrictions=["vegan"],
         allergies=["shellfish"],
-        cooking_time_preference=30,
-        difficulty_preference=6,
     )
 
     preferences = create_user_preferences(db, test_user, preferences_data)
@@ -238,24 +236,19 @@ def test_create_user_preferences(db: Session, test_user: User) -> None:
     assert preferences.user_id == test_user.id
     assert preferences.dietary_restrictions == ["vegan"]
     assert preferences.allergies == ["shellfish"]
-    assert preferences.cooking_time_preference == 30
-    assert preferences.difficulty_preference == 6
 
 
 def test_update_user_preferences(db: Session, test_user_preferences: UserPreferences) -> None:
     """Test updating existing preferences"""
     update_data = UserPreferencesUpdate(
-        dietary_restrictions=["vegan"],
-        cooking_time_preference=60
+        dietary_restrictions=["vegan"]
     )
 
     updated_preferences = update_user_preferences(db, test_user_preferences.user, update_data)
 
     assert updated_preferences.dietary_restrictions == ["vegan"]
-    assert updated_preferences.cooking_time_preference == 60
     # Other fields should remain unchanged
     assert updated_preferences.allergies == ["nuts"]
-    assert updated_preferences.difficulty_preference == 5
 
 
 def test_update_user_preferences_not_found(db: Session, test_user: User) -> None:

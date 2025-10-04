@@ -25,7 +25,7 @@ export default function ProfilePage() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loading size="lg" text="Loading..." />
+        <Loading size="lg" />
       </div>
     );
   }
@@ -59,20 +59,29 @@ export default function ProfilePage() {
           </CardHeader>
           
           <div className="p-6">
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="h-16 w-16 bg-blue-50 rounded-full flex items-center justify-center">
-                <span className="text-2xl font-bold text-blue-500">
-                  {user?.username?.charAt(0).toUpperCase()}
-                </span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="h-16 w-16 bg-blue-50 rounded-full flex items-center justify-center">
+                  <span className="text-2xl font-bold text-blue-500">
+                    {user?.username?.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    {user?.username}
+                  </h3>
+                  <p className="text-gray-600">
+                    Member since {new Date().toLocaleDateString()}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900">
-                  {user?.username}
-                </h3>
-                <p className="text-gray-600">
-                  Member since {new Date().toLocaleDateString()}
-                </p>
-              </div>
+              <Button
+                variant="secondary"
+                onClick={handleLogout}
+                className="bg-red-50 text-red-700 hover:bg-red-100"
+              >
+                Logout
+              </Button>
             </div>
           </div>
         </Card>
@@ -102,29 +111,6 @@ export default function ProfilePage() {
           </div>
         </Card>
 
-        {/* Logout Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Account Actions</CardTitle>
-          </CardHeader>
-          
-          <div className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-medium text-gray-900 mb-1">Sign Out</h3>
-                <p className="text-gray-600 text-sm">
-                  Sign out of your account
-                </p>
-              </div>
-              <Button
-                variant="secondary"
-                onClick={handleLogout}
-              >
-                Sign Out
-              </Button>
-            </div>
-          </div>
-        </Card>
       </div>
     </Layout>
   );
