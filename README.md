@@ -4,6 +4,8 @@
 
 ## 🖼️ Screenshots
 
+<div align="center">
+
 ### Recipe Generation Form
 ![Generate Form Empty](screenshots/generate-form-empty.png)
 *Clean form interface for dietary preferences and cooking time*
@@ -16,11 +18,13 @@
 *Mistral AI generating 6 personalized recipes*
 
 ![Recipe Detail Modal](screenshots/recipe-detail-modal.png)
-*Detailed recipe view with ingredients and instructions*
+*Mistral AI detailed recipe view with ingredients and instructions*
 
 ### Saved Recipes
 ![Saved Recipes](screenshots/saved-recipes.png)
 *Personal recipe collection with search functionality*
+
+</div>
 
 ## ✨ Features
 
