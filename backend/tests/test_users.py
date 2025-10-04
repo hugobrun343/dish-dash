@@ -13,7 +13,7 @@ from app.models.user_preferences import UserPreferences
 class TestUserRoutes:
     """Test user API endpoints"""
 
-    def test_get_current_user_profile(self, client: TestClient, auth_headers: dict[str, str]):
+    def test_get_current_user_profile(self, client: TestClient, auth_headers: dict[str, str]) -> None:
         """Test getting current user profile"""
         response = client.get("/api/v1/me", headers=auth_headers)
 
@@ -24,13 +24,13 @@ class TestUserRoutes:
         assert "created_at" in data
         assert data["username"] == "testuser_auth"
 
-    def test_get_current_user_profile_unauthorized(self, client: TestClient):
+    def test_get_current_user_profile_unauthorized(self, client: TestClient) -> None:
         """Test getting current user profile without authentication"""
         response = client.get("/api/v1/me")
 
         assert response.status_code == 403  # FastAPI returns 403 for protected routes
 
-    def test_get_user_preferences_not_found(self, client: TestClient, auth_headers: dict[str, str]):
+    def test_get_user_preferences_not_found(self, client: TestClient, auth_headers: dict[str, str]) -> None:
         """Test getting user preferences when none exist"""
         response = client.get("/api/v1/me/preferences", headers=auth_headers)
 
@@ -39,7 +39,7 @@ class TestUserRoutes:
         assert data["dietary_restrictions"] == []
         assert data["allergies"] == []
 
-    def test_get_user_preferences_existing(self, client: TestClient, db: Session, test_user_preferences: UserPreferences):
+    def test_get_user_preferences_existing(self, client: TestClient, db: Session, test_user_preferences: UserPreferences) -> None:
         """Test getting existing user preferences"""
         # Create auth headers for the user who has preferences
         response = client.post("/api/v1/auth/login", json={"username": "testuser"})
@@ -58,7 +58,7 @@ class TestUserRoutes:
         assert "allergies" in data
         assert "updated_at" in data
 
-    def test_create_user_preferences(self, client: TestClient, auth_headers: dict[str, str]):
+    def test_create_user_preferences(self, client: TestClient, auth_headers: dict[str, str]) -> None:
         """Test creating new user preferences"""
         preferences_data = {
             "dietary_restrictions": ["vegetarian", "gluten-free"],
@@ -72,7 +72,7 @@ class TestUserRoutes:
         assert data["dietary_restrictions"] == ["vegetarian", "gluten-free"]
         assert data["allergies"] == ["nuts", "dairy"]
 
-    def test_update_user_preferences(self, client: TestClient, db: Session, test_user_preferences: UserPreferences):
+    def test_update_user_preferences(self, client: TestClient, db: Session, test_user_preferences: UserPreferences) -> None:
         """Test updating existing user preferences"""
         # Create auth headers for the user who has preferences
         response = client.post("/api/v1/auth/login", json={"username": "testuser"})
@@ -92,7 +92,7 @@ class TestUserRoutes:
         # Other fields should remain unchanged
         assert data["allergies"] == ["nuts"]
 
-    def test_update_user_preferences_partial(self, client: TestClient, db: Session, test_user_preferences: UserPreferences):
+    def test_update_user_preferences_partial(self, client: TestClient, db: Session, test_user_preferences: UserPreferences) -> None:
         """Test partial update of user preferences"""
         # Create auth headers for the user who has preferences
         response = client.post("/api/v1/auth/login", json={"username": "testuser"})
@@ -113,7 +113,7 @@ class TestUserRoutes:
         assert data["dietary_restrictions"] == ["vegetarian"]
 
 
-    def test_update_user_preferences_unauthorized(self, client: TestClient):
+    def test_update_user_preferences_unauthorized(self, client: TestClient) -> None:
         """Test updating preferences without authentication"""
         preferences_data = {
             "dietary_restrictions": ["vegetarian"]
@@ -127,14 +127,14 @@ class TestUserRoutes:
 class TestUserService:
     """Test user service functions"""
 
-    def test_get_user_preferences_not_found(self, db: Session, test_user: User):
+    def test_get_user_preferences_not_found(self, db: Session, test_user: User) -> None:
         """Test getting preferences for user with none"""
         from app.services.user_service import get_user_preferences
 
         preferences = get_user_preferences(db, test_user)
         assert preferences is None
 
-    def test_get_user_preferences_found(self, db: Session, test_user: User, test_user_preferences: UserPreferences):
+    def test_get_user_preferences_found(self, db: Session, test_user: User, test_user_preferences: UserPreferences) -> None:
         """Test getting existing preferences"""
         from app.services.user_service import get_user_preferences
 
@@ -143,7 +143,7 @@ class TestUserService:
         assert preferences.user_id == test_user.id
         assert preferences.dietary_restrictions == ["vegetarian"]
 
-    def test_create_user_preferences(self, db: Session, test_user: User):
+    def test_create_user_preferences(self, db: Session, test_user: User) -> None:
         """Test creating new preferences"""
         from app.schemas.user import UserPreferencesUpdate
         from app.services.user_service import create_user_preferences
@@ -159,7 +159,7 @@ class TestUserService:
         assert preferences.dietary_restrictions == ["vegan"]
         assert preferences.allergies == ["shellfish"]
 
-    def test_update_user_preferences(self, db: Session, test_user: User, test_user_preferences: UserPreferences):
+    def test_update_user_preferences(self, db: Session, test_user: User, test_user_preferences: UserPreferences) -> None:
         """Test updating existing preferences"""
         from app.schemas.user import UserPreferencesUpdate
         from app.services.user_service import update_user_preferences
@@ -174,7 +174,7 @@ class TestUserService:
         # Other fields should remain unchanged
         assert updated_preferences.allergies == ["nuts"]
 
-    def test_update_user_preferences_not_found(self, db: Session, test_user: User):
+    def test_update_user_preferences_not_found(self, db: Session, test_user: User) -> None:
         """Test updating preferences that don't exist"""
         from app.schemas.user import UserPreferencesUpdate
         from app.services.user_service import update_user_preferences
