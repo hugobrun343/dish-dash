@@ -1,0 +1,25 @@
+name: Deploy to Dokploy
+
+on:
+  workflow_run:
+    workflows: ["Docker Build"]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Deploy backend to Dokploy
+        run: |
+          curl -X POST ${BACKEND_WEBHOOK_URL}
+        env:
+          BACKEND_WEBHOOK_URL: ${{ secrets.DOKPLOY_BACKEND_WEBHOOK }}
+      
+      - name: Deploy frontend to Dokploy
+        run: |
+          curl -X POST ${FRONTEND_WEBHOOK_URL}
+        env:
+          FRONTEND_WEBHOOK_URL: ${{ secrets.DOKPLOY_FRONTEND_WEBHOOK }}
+
