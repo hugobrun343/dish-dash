@@ -66,3 +66,5 @@ jobs:
         push: true
         tags: ghcr.io/${{ github.repository_owner }}/dishdash-frontend:latest
         labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
