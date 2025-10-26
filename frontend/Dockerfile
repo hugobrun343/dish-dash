@@ -7,11 +7,9 @@ RUN npm ci
 
 COPY . .
 
-# Build with environment variable - fail if not provided
+# Build with environment variable
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
-
-RUN if [ -z "$NEXT_PUBLIC_API_URL" ]; then echo "ERROR: NEXT_PUBLIC_API_URL is required" && exit 1; fi
 
 RUN npm run build
 
